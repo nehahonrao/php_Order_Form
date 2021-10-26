@@ -1,7 +1,31 @@
 <?php
 
+$products1= [
+  ['name' => 'Club Ham', 'price' => 3.20],
+  ['name' => 'Club Cheese', 'price' =>  3],
+  ['name' => 'Club Cheese & Ham', 'price' => 4],
+  ['name' => 'Club Chicken', 'price' => 4],
+  ['name' => 'Club Salmon', 'price' => 5]
+];
+
+$products2 = [
+  ['name' => 'Cola', 'price' => 2],
+  ['name' => 'Fanta', 'price' =>2],
+  ['name' => 'Sprite', 'price' => 2],
+  ['name' => 'Ice-tea', 'price' => 3],
+];
+$foods = $products1;
+$totalValue = 0;
 session_start();
 // $_SESSION['username']="name";
+$type = 'food';
+if(isset($_GET['food'])) {
+  $type = $_GET['food'];
+}
+if($type == 'drink') {
+  $foods = $products2;
+}
+
 ?>
 
 
@@ -136,13 +160,6 @@ session_start();
                $product = $_POST["product"];	
             }
 
-            if (empty($_POST["colddrink"])) {
-              $colddrinkErr = "You must select 1 or more Cold-Drink";
-           }else {
-            $_SESSION['colddrink']=$_POST["colddrink"];
-              $colddrink = $_POST["colddrink"];	
-           }
-
          }
          
          function test_input($data) {
@@ -151,23 +168,18 @@ session_start();
             $data = htmlspecialchars($data);
             return $data;
          }
-         
-//          $product = [
-//     ['name' => 'Club Ham', 'price' => 3.20],
-//     ['name' => 'Club Cheese', 'price' => 3],
-//     ['name' => 'Club Cheese & Ham', 'price' => 4],
-//     ['name' => 'Club Chicken', 'price' => 4],
-//     ['name' => 'Club Salmon', 'price' => 5]
-// ];
+  
       ?>
 
-<<div class="d-grid gap-6 d-md-flex justify-content-md-end">
-  <button class="btn btn-outline-secondary "type="button">FOOD</button>
-  <button class="btn btn-outline-secondary"type="button">DRINK</button>
-</div>
 
-    <h3>Welcome to Sandwich King!</h3>
-   
+   <h3>Welcome to Sandwich King!</h3>
+
+  <div class=" container">
+  <a href="?food=food"><button type="button" class="btn btn-secondary inline_block">FOOD</button></a></div>
+  <div class="set">
+  <a href="?food=drink"> <button type="button" class="btn btn-secondary inline_block">DRINK</button></a>
+        </div> 
+
     <form method = "POST" class="info" action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   <div class="row">
   <div class="col-md-6">
@@ -259,51 +271,48 @@ echo 'checked';
 
   <div class="form-row">
     <div class="form-group col-md-6">
-    <label for="inputState" class="bright" >Food to Eat:</label>
-      <select id="inputState" class="form-control" name="product">
-        <option selected>Select Sandwich</option>
-        <option  <?php if($_SESSION['product']=='Club Ham,€ 3.20'){
+    <label for="inputState" class="bright" >Select to Eat or Drink:</label>
+      <select id="inputState" class="form-control" name="product" multiple <?php if($_SESSION['product']=='drink' ||$_SESSION['product']=='food'){
         echo 'selected';
-      }?>>Club Ham,€ 3.20</option>
-        <option <?php if($_SESSION['product']=='Club Cheese,€ 3'){
-        echo 'selected';
-      }?>>Club Cheese,€ 3</option>
-        <option <?php if($_SESSION['product']=='Club Cheese & Ham,€ 4'){
-        echo 'selected';
-      }?>>Club Cheese & Ham,€ 4</option>
-        <option <?php if($_SESSION['product']=='Club Chicken, € 4'){
-        echo 'selected';
-      }?>>Club Chicken, € 4</option>
-        <option <?php if($_SESSION['product']=='Club Salmon, € 5'){
-        echo 'selected';
-      }?>>Club Salmon, € 5</option>
+      }?>>
+        <?php
+        if($type != 'drink') {
+        echo '<option selected>Select Sandwich</option>';
+        }
+        else
+       {
+        echo '<option selected>Select Drink</option>';
+        }
+        ?>
+        <?php
+        foreach($foods as $food) { ?>
+          <option><?php echo $food['name']?>,€<?php echo $food['price'] ?></option>
+        <?php }
+        ?>
+
       </select>  
       <span class = "error"> <?php echo $productErr;?></span>
     </div>
-
-    <div class="form-group col-md-6">
-    <label for="inputState" class="bright" >Cold Drink:</label>
-      <select id="inputState" class="form-control" name="colddrink">
-        <option selected>Select Cold-Drink</option>
-        <option <?php if($_SESSION['colddrink']=='Cola,€2'){
-        echo 'selected';
-      }?>>Cola,€2</option>
-        <option <?php if($_SESSION['colddrink']=='Fanta,€2.5'){
-        echo 'selected';
-      }?>>Fanta, €2.5</option>
-        <option <?php if($_SESSION['colddrink']=='Sprite, €1.5'){
-        echo 'selected';
-      }?>>Sprite, €1.5</option>
-        <option <?php if($_SESSION['colddrink']=='Ice Tea, €1'){
-        echo 'selected';
-      }?>>Ice Tea, €1</option>
-        <option <?php if($_SESSION['colddrink']=='Coffe, €2'){
-        echo 'selected';
-      }?>>Coffe, €2</option>
-      </select>  
-      <span class = "error"> <?php echo $colddrinkErr;?></span>
  </div>
 </div>
+
+<label>
+            <input type="checkbox" name="express_delivery" value="5" /> 
+            Express delivery (+ 5 EUR) 
+        </label>
+
+        
+           
+        
+          <div class="alert alert-primary" role="alert">
+          <p class="para">Here you will get your delivery time</p>
+            <?php if(!isset($_POST['express_delivery'])){
+               echo "You will receive your order within 45 mins";
+              }else {
+                echo "You will receive your order within 15 mins";
+              }
+              ?>
+        </div>
 
 
   <div class="form-group">
@@ -317,26 +326,17 @@ echo 'checked';
                <?php } ?> 
     </div>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  
+  <button type="submit" class="btn btn-secondary">ORDER</button>
+  <div class="alert alert-success" role="alert">
+    <?php
+    if(isset($name) && isset($lastname) && isset($email) && isset($address)  && isset($city) && isset($streetnumber) && isset($product) && isset($zipcode) && isset($gender)){
+     echo "Your Order Submitted Successfully";
+     }else{
+      echo "Server problem, Try after sometime";
+     }
+    ?></div>
 </form>
-
-<?php
-
-  if(isset($name) && ($lastname) && ($email) && ($address)  && ($city) && ($streetnumber) && ($product) && ($zipcode) && ($colddrink) && ($gender)){
-   
-    // <div class="alert alert-success" role="alert">
-    //  echo "Your Order Submitted Successfully";
-    // </div>
-    echo "Your Order Submitted Successfully";
-    
-}else{
-//   <div class="alert alert-danger" role="alert">
-//   echo "Server problem, Try after sometime";
-// </div>
-echo "Server problem, Try after sometime";
-}
-?>
-
 <?php   
         echo "<h3>Your given values are as :</h3>";
          echo ("<p>Your name is $name</p>");
@@ -349,6 +349,9 @@ echo "Server problem, Try after sometime";
          echo ("<p>your gender is $gender</p>");
         
       ?>
+  
+  
+  
   </body>
   
 </html>

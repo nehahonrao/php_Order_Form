@@ -1,7 +1,17 @@
 body{
-    margin-left: 20px;
-    margin-right: 20px;}
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.container {
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+    margin-top: 20px;
    
+}
 .bright{
     font-size: large;
     font-weight: bold;
@@ -9,9 +19,10 @@ body{
 }
 .info{
     border:3px solid black;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     padding-bottom: 20px;
-    padding-top: 40px;
+    padding-top: 20px;
+
     
     background-color: beige;
     /* margin-top: 50px; */
@@ -22,6 +33,7 @@ h3{
     text-align: center;
     padding-bottom: 1px;
     font-weight: bold;
+    margin-top: 20px;
 }
 .btn{
 
@@ -29,8 +41,16 @@ h3{
     justify-content: center;
     text-align: center;
     height: 40px;
-    margin-left: 450px;
+    margin-left: 700px;
     font-size: large;
     font-weight: bold;
 }
-
+.para{
+    font-size: large;
+    font-weight: bold;
+    font-style: italic;
+}
+.set{
+    margin-bottom: 1px;
+    text-align: right;
+}
