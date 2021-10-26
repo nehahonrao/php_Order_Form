@@ -1,0 +1,36 @@
+body{
+    margin-left: 20px;
+    margin-right: 20px;}
+   
+.bright{
+    font-size: large;
+    font-weight: bold;
+    font-style: italic;
+}
+.info{
+    border:3px solid black;
+    margin-bottom: 50px;
+    padding-bottom: 20px;
+    padding-top: 40px;
+    
+    background-color: beige;
+    /* margin-top: 50px; */
+}
+.error {color: #FF0000;}
+
+h3{
+    text-align: center;
+    padding-bottom: 1px;
+    font-weight: bold;
+}
+.btn{
+
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    margin-left: 450px;
+    font-size: large;
+    font-weight: bold;
+}
+
