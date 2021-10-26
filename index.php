@@ -3,11 +3,6 @@
 declare(strict_types=1);
 
 
-
-
-date_default_timezone_set("Europe/Brussels");
-
-
 if (!isset($_SESSION['email'])) {
     $_SESSION['email'] = "";
 }
@@ -141,5 +136,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     }  
 
-//whatIsHappening();
+
 require 'form-view.php';?>
