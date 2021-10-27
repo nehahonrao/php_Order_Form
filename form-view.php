@@ -27,7 +27,11 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
-                <input type="text" id="email" name="email" class="form-control" value="<?php echo $_SESSION['email'];?>">
+                <input type="text" id="email" name="email" class="form-control" value="<?php 
+                 if(isset($_SESSION['email'])){
+                      echo  $_SESSION['email'];
+                    }else{
+                     echo $_SESSION['email']=""; }?>">
                 <span class="bg-danger text-white"><?php echo $emailErr;?></span>
             </div>
             <!-- <div>
@@ -42,25 +46,25 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" class="form-control" value="<?php echo $_SESSION['street'];?>">
+                    <input type="text" name="street" id="street" class="form-control" value="<?php  if(isset($_SESSION['street'])){ echo  $_SESSION['street'];}?>">
                     <span class="bg-danger text-white"><?php echo $streetErr;?></span>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="streetNumber">Street number:</label>
-                    <input type="text" id="streetNumber" name="streetnumber" class="form-control" value="<?php echo $_SESSION['streetNumber'];?>">
+                    <input type="text" id="streetNumber" name="streetnumber" class="form-control" value="<?php  if(isset($_SESSION['streetnumber'])){ echo  $_SESSION['streetnumber'];}?>">
                     <span class="bg-danger text-white"><?php echo $streetnumberErr;?></span>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="form-control" value="<?php echo $_SESSION['city'];?>">
+                    <input type="text" id="city" name="city" class="form-control" value="<?php  if(isset($_SESSION['city'])){ echo  $_SESSION['city'];}?>">
                     <span class="bg-danger text-white"><?php echo $cityErr;?></span>
 
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="zipcode">Zipcode</label>
-                    <input type="text" id="zipcode" name="zipcode" class="form-control" value="<?php echo $_SESSION['zipcode'];?>">
+                    <label for="zipcode">Zipcode:</label>
+                    <input type="text" id="zipcode" name="zipcode" class="form-control" value="<?php  if(isset($_SESSION['zipcode'])){ echo  $_SESSION['zipcode'];}?>">
                     <span class="bg-danger text-white"><?php echo $zipcodeErr;?></span>
 
                 </div>
@@ -83,9 +87,10 @@
         </label>
             
         <button type="submit" class="btn btn-primary">Order!</button>
+        <button type="submit" class="btn btn-primary" name="reset">Reset</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo 0 ?></strong> in food and drinks.</footer>
+    <footer>You already ordered <strong>&euro; <?php echo $_SESSION['cost']; ?></strong> in food and drinks.</footer>
 </div>
 
 <style>
@@ -97,14 +102,15 @@
         
     }
 </style>
-<?php   
-        echo "<h3>Your given values are as :</h3>";
-         echo ("<p> your email address is $email</p>");
-         echo ("<p> your streetname  is $street</p>");
-         echo ("<p> your city is $city</p>");
-         echo ("<p> your streetnumber is $streetnumber</p>");
-         echo ("<p> your zipcode is $zipcode</p>");
+
+  
+        <h3>Your given information as:</h3>
+        <p> your email address: <?php echo $_SESSION['email'];?></p>
+        <p> your streetname: <?php echo $_SESSION['street'];?></p>
+        <p> your city: <?php echo $_SESSION['city'];?></p>
+        <p> your streetnumber: <?php echo $_SESSION['streetnumber'];?></p>
+        <p> your zipcode: <?php echo $_SESSION['zipcode'];?></p>
         
-      ?>
+    
 </body>
 </html>

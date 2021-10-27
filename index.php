@@ -3,26 +3,31 @@
 declare(strict_types=1);
 
 
-if (!isset($_SESSION['email'])) {
-    $_SESSION['email'] = "";
-}
-if (!isset($_SESSION['street'])) {
-    $_SESSION['street'] = "";
-}
-if (!isset($_SESSION['streetNumber'])) {
-    $_SESSION['streetNumber'] = "";
-}
-if (!isset($_SESSION['city'])) {
-    $_SESSION['city'] = "";
-}
-if (!isset($_SESSION['zipcode'])) {
-    $_SESSION['zipcode'] = "";
-}
-$total = 0;
-if (isset($_COOKIE['total'])) {
-$total = ($_COOKIE['total']);
-}
 
+
+
+// function clearfield(){
+
+// if (empty($_SESSION['email'])) {
+//     $_SESSION['email'] = "";
+// }
+// if (empty($_SESSION['street'])) {
+//     $_SESSION['street'] = "";
+// }
+// if (empty($_SESSION['streetNumber'])) {
+//     $_SESSION['streetNumber'] = "";
+// }
+// if (empty($_SESSION['city'])) {
+//     $_SESSION['city'] = "";
+// }
+// if (empty($_SESSION['zipcode'])) {
+//     $_SESSION['zipcode'] = "";
+// }
+// $total = 0;
+// if (isset($_COOKIE['total'])) {
+// $total = ($_COOKIE['total']);
+// }
+// }
 
 
 $emailErr = $streetErr = $streetnumberErr = $cityErr = $itemsErr = $zipcodeErr = "";
@@ -45,7 +50,7 @@ $products2 = [
   ['name' => 'Ice-tea', 'price' => 3],
 ];
 $foods = $products1;
-$totalValue = 0;
+// $totalValue = 0;
 session_start();
 // $_SESSION['username']="name";
 $type = 'food';
@@ -55,6 +60,11 @@ if(isset($_GET['food'])) {
 if($type == 'drink') {
   $foods = $products2;
 }
+// counting total price
+
+$totalValue = 0;
+
+
 
 
 if(isset($_POST['express_delivery'])){
@@ -68,27 +78,22 @@ else{
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // var_dump($_POST["items"]);
-  
-    $_SESSION['email'] = $_POST["email"];
-    $_SESSION['street'] = $_POST["street"];
-    $_SESSION['streetnumber'] = $_POST["streetnumber"];
-    $_SESSION['city'] = $_POST["city"];
-    $_SESSION['zipcode'] = $_POST["zipcode"];
-
+    // if($_POST('reset')){
+    //     clearfield();
+    // }
 
     if (empty($_POST["email"])) {
         $emailErr = "Email is required";
      }else {
        $_SESSION['email'] = $_POST["email"];
-        // check if e-mail address is well-formed
+       
         if (!filter_var($_SESSION['email'], FILTER_VALIDATE_EMAIL)) {
            $emailErr = "Invalid email format"; 
         }
      }
 
-    if (empty($_POST["street"]) || !preg_match("/^[a-zA-Z]+$/", $_POST["street"])) {
-        $streetErr = "* Street name is required";
+    if (empty($_POST["street"])) {
+        $streetErr = "Street name is required";
     } else {
         $_SESSION['street'] = $_POST["street"];;
     }
@@ -104,17 +109,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
      }
 
-    if (empty($_POST["city"]) || !preg_match("/^[a-zA-Z]+$/", $_POST["city"])) {
-        $cityErr = "* City name is required";
+    if (empty($_POST["city"])){
+        $cityErr = "City name is required";
     } else {
-        $city = ($_POST["city"]);
+        $_SESSION['city']=$_POST["city"];
+        // $city = ($_POST["city"]);
     }
 
     if (empty($_POST["zipcode"])) {
         $zipcodeErr = "zipcode is required";
      }else {
        $_SESSION['zipcode']=$_POST["zipcode"];
-        // $zipcode = test_input($_POST["zipcode"]);
+       
         if(!is_numeric($_SESSION['zipcode']))
         {
             $zipcodeErr = "Only Enter Numbers";
@@ -122,19 +128,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      }
 
     if (empty($_POST["items"])){
-        $itemsErr = "* select items";
+        $itemsErr = "select items";
     } else {
-        $items = ($_POST["items"]);
+        $_SESSION['items']=$_POST['items'];
+        
     }
-    
-    ?>
+
+
+if(!$emailErr && ! $streetErr && !$streetnumberErr && !$cityErr && !$zipcodeErr){
+    if(isset($_SESSION['cost'])) {
+        $totalValue = $_SESSION['cost'];
+    }
+    if(isset($_POST['items'])){
+        foreach ($_POST['items'] as $food) {
+            $totalValue= $totalValue + $food;
+        }
+        // var_dump($totalValue);
+     }
+     $_SESSION['cost']=$totalValue;
+}
+
+?>
     <?php
     if ($emailErr == "" && $streetErr == "" && $streetnumberErr == "" && $cityErr == "" && $zipcodeErr == "") {
     ?>
-   <div class="alert alert-success" role="alert"><?php echo "Your order will arrive at $deliveryTime";?></div>
+   <div class="alert alert-primary" role="alert"><?php echo "Your order will arrive at $deliveryTime";?></div>
    <?php   }
 
     }  
 
+?>
 
-require 'form-view.php';?>
+<?php require 'form-view.php';?>
