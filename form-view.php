@@ -86,11 +86,11 @@
             Express delivery (+ 5 EUR) 
         </label>
             
-        <button type="submit" class="btn btn-primary">Order!</button>
+        <button type="submit" class="btn btn-primary" name="order">Order!</button>
         <button type="submit" class="btn btn-primary" name="reset">Reset</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo $_SESSION['cost']; ?></strong> in food and drinks.</footer>
+    <footer>You already ordered <strong>&euro; <?php if(isset( $_SESSION['cost'])){echo $_SESSION['cost'];} ?></strong> in food and drinks.</footer>
 </div>
 
 <style>
@@ -106,10 +106,14 @@
   
         <h3>Your given information as:</h3>
         <p> your email address: <?php echo $_SESSION['email'];?></p>
-        <p> your streetname: <?php echo $_SESSION['street'];?></p>
+        <p> your streetname:<?php echo $_SESSION['street'];?></p>
         <p> your city: <?php echo $_SESSION['city'];?></p>
         <p> your streetnumber: <?php echo $_SESSION['streetnumber'];?></p>
         <p> your zipcode: <?php echo $_SESSION['zipcode'];?></p>
+        <p> Delivery Time: <?php echo $deliveryTime;?></p>
+        <p> your order: <?php echo implode("''",$_SESSION['items']);?></p>
+        <p> Total amount to pay: <?php echo $_SESSION['cost'];?></p>
+
         
     
 </body>

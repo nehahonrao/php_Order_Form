@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 
 // function clearfield(){
-
+//     $_SESSION['email'] = "";
+// }
 // if (empty($_SESSION['email'])) {
 //     $_SESSION['email'] = "";
 // }
@@ -27,7 +28,7 @@ declare(strict_types=1);
 // if (isset($_COOKIE['total'])) {
 // $total = ($_COOKIE['total']);
 // }
-// }
+
 
 
 $emailErr = $streetErr = $streetnumberErr = $cityErr = $itemsErr = $zipcodeErr = "";
@@ -62,9 +63,6 @@ if($type == 'drink') {
 }
 // counting total price
 
-$totalValue = 0;
-
-
 
 
 if(isset($_POST['express_delivery'])){
@@ -75,22 +73,31 @@ else{
     $deliveryTime = "45 minutes";
 }
 
+if(isset($_POST['reset'])){
+    $_SESSION['email']=" ";
+    $_SESSION['street']=" ";
+    $_SESSION['streetnumber']=" ";
+    $_SESSION['city']=" ";
+    $_SESSION['zipcode']=" ";
+    $_SESSION['items']=" ";
+    $_SESSION['cost']=" ";
+    
+}
+if(isset($_POST['order'])){
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    if (isset($_POST["email"])) {
+        // var_dump($_POST["email"]);
+        $_SESSION['email'] = $_POST["email"];
 
-    // if($_POST('reset')){
-    //     clearfield();
-    // }
-
-    if (empty($_POST["email"])) {
-        $emailErr = "Email is required";
-     }else {
-       $_SESSION['email'] = $_POST["email"];
-       
-        if (!filter_var($_SESSION['email'], FILTER_VALIDATE_EMAIL)) {
-           $emailErr = "Invalid email format"; 
+        if($_POST["email"] == '') {
+            $emailErr = "Email is required";
         }
+        else if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            $emailErr = "Invalid email format"; 
+         }
      }
+
 
     if (empty($_POST["street"])) {
         $streetErr = "Street name is required";
@@ -134,29 +141,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
     }
 
-
+    $totalValue = 0;
+    $deliverycost=5;
 if(!$emailErr && ! $streetErr && !$streetnumberErr && !$cityErr && !$zipcodeErr){
     if(isset($_SESSION['cost'])) {
         $totalValue = $_SESSION['cost'];
     }
-    if(isset($_POST['items'])){
+    if(isset($_POST['items'])&& isset($_POST['express_delivery'])){
         foreach ($_POST['items'] as $food) {
-            $totalValue= $totalValue + $food;
+            $totalValue =intval( $totalValue) + intval($food) +$deliverycost;}
+        }else if(isset($_POST['items'])){
+        foreach ($_POST['items'] as $food) { 
+                $totalValue = intval($totalValue) +intval($food);
+        }
         }
         // var_dump($totalValue);
-     }
+     
      $_SESSION['cost']=$totalValue;
 }
-
+    
 ?>
     <?php
     if ($emailErr == "" && $streetErr == "" && $streetnumberErr == "" && $cityErr == "" && $zipcodeErr == "") {
     ?>
+    <?php
+    if(isset($_SESSION['email'])&& isset($_SESSION['city'])&& isset($_SESSION['streetnumber'])&& isset($_SESSION['street'])&& isset($_SESSION['zipcode'])&& isset($_SESSION['cost'])&& isset($_SESSION['items'])){
+    ?>
    <div class="alert alert-primary" role="alert"><?php echo "Your order will arrive at $deliveryTime";?></div>
    <?php   }
-
-    }  
+    }
+}
 
 ?>
 
+
 <?php require 'form-view.php';?>
+
